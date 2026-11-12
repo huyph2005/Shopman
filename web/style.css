@@ -1,0 +1,14 @@
+body { font-family: Arial, Helvetica, sans-serif; font-size: 14px; margin: 24px; }
+h2 { margin-top: 0; }
+table.grid { border-collapse: collapse; }
+table.grid th, table.grid td { border: 1px solid #000; padding: 4px 10px; }
+table.grid th { text-align: left; }
+td.right, th.right { text-align: right; }
+table.form td { padding: 3px 6px; }
+.error { color: #c00000; }
+.note { color: #555; font-style: italic; font-size: 12px; }
+table.form input[type=text], table.form input[type=password] { box-sizing: border-box; width: 360px; }
+table.form input.w3 { width: 117px; }
+table.form input.w2 { width: 104px; }
+table.form input.w2b { width: 160px; }
+span.label2 { display: inline-block; width: 84px; padding-left: 2px; }
