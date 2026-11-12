@@ -62,9 +62,8 @@ public class MemberDAO1 extends DAO1 {
      */
     public Member1 checkLogin(String username, String password) {
         Member1 result = null;
-        String sql = "SELECT m.*, s.staffCode, s.position, c.customerCode FROM tblMember1 m"
+        String sql = "SELECT m.*, s.staffCode, s.position FROM tblMember1 m"
                 + " LEFT JOIN tblStaff1 s ON s.tblMember1id = m.id"
-                + " LEFT JOIN tblCustomer1 c ON c.tblMember1id = m.id"
                 + " WHERE m.username = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -79,8 +78,9 @@ public class MemberDAO1 extends DAO1 {
                     staff.setPosition(position);
                     result = staff;
                 } else {
+                    // khách hàng: mã khách hàng là "KH" + id đủ 5 chữ số
                     Customer1 customer = new Customer1();
-                    customer.setCustomerCode(rs.getString("customerCode"));
+                    customer.setCustomerCode(String.format("KH%05d", rs.getInt("id")));
                     result = customer;
                 }
                 result.setId(rs.getInt("id"));

@@ -35,7 +35,6 @@ CREATE TABLE tblMember1 (
 
 CREATE TABLE tblCustomer1 (
     tblMember1id integer(10) NOT NULL,
-    customerCode varchar(50) NOT NULL UNIQUE,
     PRIMARY KEY (tblMember1id),
     FOREIGN KEY (tblMember1id) REFERENCES tblMember1 (id)
 );
@@ -167,10 +166,10 @@ INSERT INTO tblStaff1 (tblMember1id, staffCode, position) VALUES
     (1, 'NV001', 'MANAGER'),
     (2, 'NV002', 'SALES_STAFF');
 
-INSERT INTO tblCustomer1 (tblMember1id, customerCode) VALUES
-    (3, 'KH00003'),
-    (4, 'KH00004'),
-    (5, 'KH00005');
+INSERT INTO tblCustomer1 (tblMember1id) VALUES
+    (3),
+    (4),
+    (5);
 
 INSERT INTO tblDeliveryStaff1 (id, name, tel) VALUES
     (1, 'Đỗ Văn Tùng', '0987000001');

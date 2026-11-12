@@ -70,7 +70,7 @@ Lưu thông tin do `CustomerDAO1.addCustomer()` làm:
 
 1. Thêm địa chỉ vào `tblAddress1`, lấy id vừa sinh.
 2. Thêm thành viên vào `tblMember1` (mật khẩu băm bằng `BCrypt.hashpw()`), khóa ngoại `tblAddress1id` là id ở bước 1.
-3. Thêm khách hàng vào `tblCustomer1` với mã khách hàng `KH` + id thành viên đủ 5 chữ số, ví dụ `KH00006`.
+3. Thêm khách hàng vào `tblCustomer1`. Mã khách hàng không lưu trong cơ sở dữ liệu mà ghép từ id thành viên: `KH` + id đủ 5 chữ số, ví dụ `KH00006`.
 
 Ba lệnh chạy trong cùng một transaction: thành công cả ba thì `commit()`, có lỗi thì `rollback()`, nên không bao giờ chỉ lưu được một phần.
 
@@ -102,7 +102,7 @@ Các trường hợp lỗi:
 | Trường hợp | Thông báo |
 |---|---|
 | Chưa chọn đủ hai ngày | Vui lòng chọn ngày bắt đầu và ngày kết thúc |
-| Ngày kết thúc không sau ngày bắt đầu | Ngày kết thúc phải sau ngày bắt đầu |
+| Ngày kết thúc trước ngày bắt đầu | Ngày kết thúc không được trước ngày bắt đầu |
 | Không có hóa đơn đã giao trong khoảng đó | Không có dữ liệu thống kê trong khoảng thời gian đã chọn (giữ nguyên hai ngày đã chọn) |
 
 ## Kiến trúc
@@ -310,7 +310,7 @@ Muốn thử lại từ đầu (để annv lại là tài khoản mới) thì ch
 |---|---|
 | Từ 01/09/2026 đến 30/09/2026 | 4 mặt hàng như bảng dưới, tổng 173 sản phẩm, 10.772.000 đ |
 | Click dòng Sữa tươi Vinamilk hộp 1L | 3 lần giao dịch HD0921, HD0957, HD1003, tổng 96 sản phẩm, 3.072.000 đ; "Quay lại" hiện lại bảng thống kê |
-| Từ 30/09/2026 đến 01/09/2026 | "Ngày kết thúc phải sau ngày bắt đầu" |
+| Từ 30/09/2026 đến 01/09/2026 | "Ngày kết thúc không được trước ngày bắt đầu" |
 | Từ 01/01/2020 đến 31/01/2020 | "Không có dữ liệu thống kê trong khoảng thời gian đã chọn" |
 
 Kết quả thống kê tháng 9/2026:

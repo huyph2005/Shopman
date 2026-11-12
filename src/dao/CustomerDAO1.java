@@ -16,7 +16,7 @@ public class CustomerDAO1 extends DAO1 {
 
     /**
      * Lưu khách hàng mới vào tblAddress1, tblMember1, tblCustomer1 trong cùng một transaction.
-     * Mật khẩu được băm bằng bcrypt; mã khách hàng là "KH" + id thành viên đủ 5 chữ số.
+     * Mật khẩu được băm bằng bcrypt; mã khách hàng ghép từ id thành viên nên không lưu.
      * @return true nếu lưu thành công
      */
     public boolean addCustomer(Customer1 customer) {
@@ -26,8 +26,7 @@ public class CustomerDAO1 extends DAO1 {
         String sqlMember = "INSERT INTO tblMember1(username, password, firstName,"
                 + " middleName, lastName, email, tel, tblAddress1id)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        String sqlCustomer = "INSERT INTO tblCustomer1(tblMember1id, customerCode)"
-                + " VALUES (?, ?)";
+        String sqlCustomer = "INSERT INTO tblCustomer1(tblMember1id) VALUES (?)";
         try {
             con.setAutoCommit(false);
 
@@ -63,12 +62,11 @@ public class CustomerDAO1 extends DAO1 {
                 customer.setId(rs.getInt(1));
             }
 
-            // 3. lưu khách hàng vào tblCustomer1 với mã khách hàng
-            customer.setCustomerCode(String.format("KH%05d", customer.getId()));
+            // 3. lưu khách hàng vào tblCustomer1; mã khách hàng là "KH" + id đủ 5 chữ số
             ps = con.prepareStatement(sqlCustomer);
             ps.setInt(1, customer.getId());
-            ps.setString(2, customer.getCustomerCode());
             ps.executeUpdate();
+            customer.setCustomerCode(String.format("KH%05d", customer.getId()));
 
             con.commit();
             result = true;

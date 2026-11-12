@@ -12,15 +12,13 @@
         // ProductRevenueStatView1.jsp quay lại vì không có dữ liệu
         outMessage = "Không có dữ liệu thống kê trong khoảng thời gian đã chọn";
     } else if (request.getParameter("subViewStatistics") != null) {
-        // Kiểm tra khoảng thời gian: ngày kết thúc phải sau ngày bắt đầu
-        try {
-            if (!LocalDate.parse(inEndDate).isAfter(LocalDate.parse(inStartDate))) {
-                outMessage = "Ngày kết thúc phải sau ngày bắt đầu";
-            }
-        } catch (Exception e) {
+        // Kiểm tra khoảng thời gian
+        if (inStartDate == null || inStartDate.isEmpty()
+                || inEndDate == null || inEndDate.isEmpty()) {
             outMessage = "Vui lòng chọn ngày bắt đầu và ngày kết thúc";
-        }
-        if (outMessage == null) {
+        } else if (LocalDate.parse(inEndDate).isBefore(LocalDate.parse(inStartDate))) {
+            outMessage = "Ngày kết thúc không được trước ngày bắt đầu";
+        } else {
             // hợp lệ: gọi trang thống kê
             String url = "ProductRevenueStatView1.jsp?startDate=" + inStartDate
                     + "&endDate=" + inEndDate;
