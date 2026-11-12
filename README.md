@@ -40,12 +40,12 @@ Theo quy ước đặt tên của học phần, tên lớp, tên bảng và tên
 Luồng trang:
 
 ```
-HomeView1.jsp ──click "Đăng ký"──> RegisterView1.jsp ──click "Đăng ký"──> doRegister1.jsp
-                                         │                                   │
-                                   click "Huỷ"                     ┌─────────┴──────────┐
-                                         ▼                         ▼                    ▼
-                                   HomeView1.jsp            có lỗi: quay lại      "Đăng ký thành công!"
-                                                            RegisterView1.jsp     click OK → HomeView1.jsp
+HomeView1.jsp ──click "Đăng ký thành viên"──> RegisterView1.jsp ──click "Đăng ký"──> doRegister1.jsp
+                                                    │                                   │
+                                              click "Huỷ"                     ┌─────────┴──────────┐
+                                                    ▼                         ▼                    ▼
+                                              HomeView1.jsp            có lỗi: quay lại      "Đăng ký thành công!"
+                                                                       RegisterView1.jsp     click OK → HomeView1.jsp
 ```
 
 Thông tin nhập: họ, tên đệm, tên, tên đăng nhập, mật khẩu, nhập lại mật khẩu, email, số điện thoại, số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố. Tất cả bắt buộc, trừ tên đệm.
@@ -166,7 +166,8 @@ Trang có tiền tố `do` (`doLogin1.jsp`, `doRegister1.jsp`, `doLogout1.jsp`) 
 | Nhập hàng | `tblSupplier1`, `tblSupplierProduct1`, `tblImportReceipt1`, `tblImportDetail1` |
 | Bán hàng | `tblInvoice1`, `tblInvoiceDetail1` |
 
-- Khóa chính là cột `id` tự tăng; khóa ngoại đặt tên `tbl<Bảng>1id`, ví dụ `tblMember1id`.
+- Khóa chính là cột `id` tự tăng, riêng `tblCustomer1`, `tblStaff1` dùng `tblMember1id` vừa là khóa chính vừa là khóa ngoại; khóa ngoại đặt tên `tbl<Bảng>1id`, ví dụ `tblMember1id`.
+- `tblCustomer1` chỉ có cột `tblMember1id`; mã khách hàng không lưu mà ghép từ id (`KH` + id đủ 5 chữ số).
 - `tblStaff1.position` phân biệt nhân viên quản lý (`MANAGER`) và nhân viên bán hàng (`SALES_STAFF`).
 - `tblInvoice1.status` là trạng thái hóa đơn: `PENDING` (chờ duyệt), `REJECTED` (bị từ chối), `DELIVERING` (đang giao), `DELIVERED` (đã giao).
 - `username`, `email`, `tel` của `tblMember1` là duy nhất.
@@ -276,7 +277,7 @@ Dữ liệu mẫu có 7 hóa đơn; chỉ 3 hóa đơn đã giao trong tháng 9/
 
 ### Đăng ký thành viên
 
-Từ trang chủ, click "Đăng ký" rồi nhập:
+Từ trang chủ, click "Đăng ký thành viên" rồi nhập:
 
 | Trường | Giá trị |
 |---|---|
@@ -290,17 +291,18 @@ Từ trang chủ, click "Đăng ký" rồi nhập:
 
 | Cách thử | Kết quả đúng |
 |---|---|
-| Nhập như bảng trên, click "Đăng ký" | "Đăng ký thành công!", khách hàng mới có mã KH00006; click OK về trang chủ |
+| Nhập như bảng trên, click "Đăng ký" | "Đăng ký thành công!", khách hàng mới có id 6 (mã KH00006); click OK về trang chủ |
 | Click "Huỷ" | Về trang chủ, không lưu gì |
 | Nhập lại mật khẩu là An@1234 | "Mật khẩu nhập lại không khớp", hai ô mật khẩu bị xóa trống |
-| Đăng ký lần hai với cùng email annv@gmail.com | "Email đã được sử dụng, vui lòng nhập email khác" |
-| Đổi email khác, giữ tên đăng nhập annv | "Tên đăng nhập đã được sử dụng, vui lòng chọn tên khác" |
-| Đổi email và tên đăng nhập khác, giữ số 0912345678 | "Số điện thoại đã được sử dụng, vui lòng nhập số khác" |
+| Trước đó có một tài khoản khác dùng email annv@gmail.com | "Email đã được sử dụng, vui lòng nhập email khác"; sửa email thành an.nguyenvan@gmail.com thì đăng ký thành công |
+| Trước đó có một tài khoản khác dùng tên đăng nhập annv | "Tên đăng nhập đã được sử dụng, vui lòng chọn tên khác"; sửa thành annv96 thì đăng ký thành công |
+| Trước đó có một tài khoản khác dùng số điện thoại 0912345678 | "Số điện thoại đã được sử dụng, vui lòng nhập số khác"; sửa thành 0987654321 thì đăng ký thành công |
 | Để trống ô Tỉnh/Thành phố | "Vui lòng nhập đầy đủ các thông tin bắt buộc" |
 | Email là annv.gmail.com | "Email không đúng định dạng" |
+| Không lưu được vào cơ sở dữ liệu (thử bằng cách tạm đổi tên bảng `tblCustomer1`) | "Lưu thông tin không thành công, vui lòng thử lại"; không bảng nào có bản ghi mới |
 | Đăng nhập bằng annv / An@12345 | Đăng nhập thành công, vào trang chủ |
 
-Muốn thử lại từ đầu (để annv lại là tài khoản mới) thì chạy lại `db/shopman.sql`.
+Ba trường hợp trùng thông tin cần một tài khoản khác chỉ trùng đúng một trong ba thông tin email, tên đăng nhập, số điện thoại của An (đăng ký trước tài khoản đó ở trang đăng ký). Muốn thử lại từ đầu (để annv lại là tài khoản mới) thì chạy lại `db/shopman.sql`.
 
 ### Xem thống kê mặt hàng theo doanh thu
 
@@ -312,6 +314,8 @@ Muốn thử lại từ đầu (để annv lại là tài khoản mới) thì ch
 | Click dòng Sữa tươi Vinamilk hộp 1L | 3 lần giao dịch HD0921, HD0957, HD1003, tổng 96 sản phẩm, 3.072.000 đ; "Quay lại" hiện lại bảng thống kê |
 | Từ 30/09/2026 đến 01/09/2026 | "Ngày kết thúc không được trước ngày bắt đầu" |
 | Từ 01/01/2020 đến 31/01/2020 | "Không có dữ liệu thống kê trong khoảng thời gian đã chọn" |
+| Ngày bắt đầu 01/09/2026, để trống ngày kết thúc | "Vui lòng chọn ngày bắt đầu và ngày kết thúc" |
+| Từ 12/09/2026 đến 12/09/2026 (một ngày) | 3 mặt hàng của hóa đơn HD0957, tổng 49 sản phẩm, 3.142.000 đ |
 
 Kết quả thống kê tháng 9/2026:
 
